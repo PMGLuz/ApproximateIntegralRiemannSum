@@ -5,6 +5,7 @@ The Mathematica notebook aims to motivate the definition of the integral of a fu
 The notebook builds a frame where the function and the integration domain can be set directly in the frame. The function field allows the use of StandardForm input, the initial point and final point fields allow only numeric input. To confirm the input and press ENTER. 
 
 The frame starts by showing the graph of the function and the region
+
 [![ApproximateIntegralRiemannSum_1](https://github.com/user-attachments/assets/202cb7de-3e3b-4f75-86b0-a362b8485f45)](https://github.com/user-attachments/assets/202cb7de-3e3b-4f75-86b0-a362b8485f45)
 
 The thumbnail on the right-hand side, switches the graph-region plot and the graph with the approximating rectangles plot. The change also hides or shows the number of domain partition slider.
