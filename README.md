@@ -6,7 +6,7 @@ The notebook builds a frame where the function and the integration domain can be
 
 The frame starts by showing the graph of the function and the region .
 
-[![ApproximateIntegralRiemannSum_1](https://raw.githubusercontent.com/PMGLuz/ApproximateIntegralRiemannSum/main/blob/Assets/ApproximateIntegralRiemannSum_1.mp4)](https://raw.githubusercontent.com/PMGLuz/ApproximateIntegralRiemannSum/main/blob/Assets/ApproximateIntegralRiemannSum_1.mp4)
+[![ApproximateIntegralRiemannSum_1](https://github.com/PMGLuz/ApproximateIntegralRiemannSum/blob/main/Assets/ApproximateIntegralRiemannSum_1.mp4)](https://github.com/PMGLuz/ApproximateIntegralRiemannSum/blob/main/Assets/ApproximateIntegralRiemannSum_1.mp4)
 
 The thumbnail on the right-hand side, switches the graph-region plot and the graph with the approximating rectangles plot. The change also hides or shows the number of domain partition slider.
 
