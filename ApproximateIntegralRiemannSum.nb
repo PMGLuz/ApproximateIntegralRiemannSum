@@ -1,0 +1,140 @@
+Off[NumberForm::reqsigz];
+Manipulate[
+    MaxNumberPartitions=24;
+    cValue=!thumbFlag;
+    initPoint=Rationalize@xi;
+    finalPoint=Rationalize@xf;
+    function[x_]=ReleaseHold[inputFunction/. HoldPattern[xx_/;MatchQ[xx,Symbol["x"]]]:>x];
+    \[CapitalDelta]n=(finalPoint-initPoint)/numbPartitions;
+    
+    
+    (*The approximating rectangles' height is evaluated at the middle point of each sub-interval*)
+    rectangleGroup=GraphicsGroup[
+        {EdgeForm[Dashed],
+         CMYKColor[.99,.4,0,.01,.4],
+         Table[Rectangle[{initPoint+i \[CapitalDelta]n,0},{initPoint+(i+1)\[CapitalDelta]n,function[(2initPoint+(2i+1)\[CapitalDelta]n)/2]}],
+               {i,0,numbPartitions-1}
+               ]
+         }]//Graphics;
+    
+    graph1=Plot[
+        {function[x],0},
+        {x,initPoint,finalPoint},
+        PlotRange->{{initPoint 1.05,finalPoint 1.15},All},
+        PlotStyle->{Automatic,None},
+        AxesStyle->{{Black,Thickness[.004],Arrowheads[Medium]},{Black,Thickness[.004],Arrowheads[Medium]}},
+        Filling->Axis,
+        ImageSize->400
+    ];
+    
+    graph2=Show[
+        Plot[
+            {function[x],0},{x,initPoint,finalPoint},
+            PlotRange->{{initPoint 1.05,finalPoint 1.15},All},
+            PlotStyle->{Automatic,None},
+            AxesStyle->{{Black,Thickness[.004],Arrowheads[Medium]},{Black,Thickness[.004],Arrowheads[Medium]}},
+            Ticks->{Table[xi,{xi,initPoint,finalPoint,\[CapitalDelta]n}],Automatic}
+        ],
+        rectangleGroup,
+        ImageSize->400
+    ];
+    
+    (*Do this here so that thumbnails are updated live. ImageResize is very time consuming.*)
+    (*thumbGraph1=ImageResize[graph1,.21AbsoluteCurrentValue@WindowSize];
+    thumbGraph2=ImageResize[graph2,.21AbsoluteCurrentValue@WindowSize];*)
+    thumbGraph1=Plot[
+        {function[x],0},
+        {x,initPoint,finalPoint},
+        PlotRange->{{initPoint 1.05,finalPoint 1.19},All},
+        PlotStyle->{Thickness[.005],None},
+        TicksStyle->Directive[4],
+        AxesStyle->{{Black,Thickness[.004],Arrowheads[Tiny]},{Black,Thickness[.004],Arrowheads[Tiny]}},
+        Filling->Axis,
+        ImageSize->100
+    ];
+    
+    thumbGraph2=Show[
+        Plot[
+            {function[x],0},{x,initPoint,finalPoint},
+            PlotRange->{{initPoint 1.05,finalPoint 1.19},All},
+            PlotStyle->{Thickness[.005],None},
+            AxesStyle->{{Black,Thickness[.004],Arrowheads[Tiny]},{Black,Thickness[.004],Arrowheads[Tiny]}},
+            TicksStyle->Directive[4](*,
+            Ticks->{Table[xi,{xi,initPoint,finalPoint,\[CapitalDelta]n}],Automatic}*)
+        ],
+        rectangleGroup,
+        ImageSize->100
+    ];
+    
+    
+    (*Display output in a column*)
+    sentenceOne= Style[ 
+    StringForm[
+        "Real value of the net area: `1` ~ `2`",
+        Simplify@Integrate[function[x],{x,initPoint,finalPoint}], 
+        Quiet@NumberForm[Integrate[function[x],{x,initPoint,finalPoint}]+.0,{4,4}] 
+    ],
+    Black,14
+    ];
+    sentenceTwo= Style[
+        StringForm[
+            "Approximate value of the net area: `1`",
+            Quiet@NumberForm[\[CapitalDelta]n*Sum[function[(2initPoint+(2i+1)\[CapitalDelta]n)/2],{i,0,numbPartitions-1}]+.0,{4,4} ]
+        ], 
+        Black,14
+    ];
+    
+    
+    Dynamic@Column[{
+        If[cValue,graph1,graph2],
+        Spacer[{0,20}],
+        sentenceOne,
+        sentenceTwo
+        },
+        Alignment->{Center,Left,Left}
+    ],
+    
+    (*Control setup*)
+    {{thumbFlag,False},None},
+    Dynamic@Grid[{
+        {
+            Dynamic@Column[{
+            Row[{
+                Control[{
+                {inputFunction,Unevaluated[x^2],Style["f(x)=",Black,14]},
+                InputField[#,Hold[Expression],FieldSize->{25,1}]&,
+                BaseStyle->{Black,14}
+                }],
+                Spacer[32],
+                Control[{{xi,-1,Style["Subscript[x, i]=",Black,14]}, InputField[#,Number,FieldSize->{3,1}]&,BaseStyle->{Black,14}}],
+                Spacer[25],
+                Control[{{xf,1,Style["Subscript[x, f]=",Black,14]}, InputField[#,Number,FieldSize->{3,1}]&,BaseStyle->{Black,14}}]
+            }](*11-position of the grid*),
+            If[!cValue,
+                Control[{
+                    {numbPartitions,1,
+                     Dynamic@Panel[
+                         Row[{Style["Partitions: ",Black,13],Style[numbPartitions,Black,13]}],
+                         ImageSize->{90,Automatic}
+                    ]},
+                    Range[1,MaxNumberPartitions,1],
+                    ControlType->Slider,
+                    ContinuousAction->True
+                }],
+                Nothing
+            ] (*End of If*)
+            }, Spacings->2] (*End of 1st column*),
+            Dynamic@Column[{
+                Button[
+                    If[!cValue,
+                        Dynamic@thumbGraph1,
+                        Dynamic@thumbGraph2
+                    ],
+                    thumbFlag=cValue
+                ] (*End of Button*)
+            }] (*End of 2nd column*)
+        } 
+        } (*End of Grid content*)
+    ] (*End of Grid*),
+    TrackedSymbols:>{inputFunction,numbPartitions,xi,xf,thumbFlag}
+]
