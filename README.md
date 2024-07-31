@@ -1,5 +1,4 @@
 #ApproximateIntegralRiemannSum
-
 The Mathematica notebook aims to motivate the definition of the integral of a function as a Riemann sum, by showing how the region between the graph of the function and the $xx$ axis can be approximated by increasingly slimmer rectangles.
 
 The notebook builds a frame where the function and the integration domain can be set directly in the frame. The function field allows the use of StandardForm input, the initial point and final point fields allow only numeric input. To confirm the input and press ENTER. 
